@@ -1,0 +1,389 @@
+From: "Saved by Internet Explorer 11"
+Subject: 
+Date: Tue, 4 Sep 2018 09:42:50 +0200
+MIME-Version: 1.0
+Content-Type: text/html;
+	charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://datacarpentry.org/R-ecology-lesson/code-handout.R
+X-MimeOLE: Produced By Microsoft MimeOLE
+
+<!DOCTYPE HTML>
+<!DOCTYPE html PUBLIC "" ""><HTML><HEAD><META content=3D"IE=3D11.0000"=20
+http-equiv=3D"X-UA-Compatible">
+
+<META http-equiv=3D"Content-Type" content=3D"text/html; =
+charset=3Dwindows-1252">
+<META name=3D"GENERATOR" content=3D"MSHTML 11.00.10570.1001"></HEAD>
+<BODY>
+<PRE>=0A=
+### Creating objects in R=0A=
+### Challenge=0A=
+##=0A=
+## What are the values after each statement in the following?=0A=
+##=0A=
+## mass &lt;- 47.5            # mass?=0A=
+## age  &lt;- 122             # age?=0A=
+## mass &lt;- mass * 2.0      # mass?=0A=
+## age  &lt;- age - 20        # age?=0A=
+## mass_index &lt;- mass/age  # mass_index?=0A=
+### Vectors and data types=0A=
+## ## We=E2=80=99ve seen that atomic vectors can be of type character, =
+numeric, integer, and=0A=
+## ## logical. But what happens if we try to mix these types in a single=0A=
+## ## vector?=0A=
+## =0A=
+## ## What will happen in each of these examples? (hint: use `class()` to=0A=
+## ## check the data type of your object)=0A=
+## num_char &lt;- c(1, 2, 3, "a")=0A=
+## =0A=
+## num_logical &lt;- c(1, 2, 3, TRUE)=0A=
+## =0A=
+## char_logical &lt;- c("a", "b", "c", TRUE)=0A=
+## =0A=
+## tricky &lt;- c(1, 2, 3, "4")=0A=
+## =0A=
+## ## Why do you think it happens?=0A=
+## =0A=
+## ## You've probably noticed that objects of different types get=0A=
+## ## converted into a single, shared type within a vector. In R, we call=0A=
+## ## converting objects from one class into another class=0A=
+## ## _coercion_. These conversions happen according to a hierarchy,=0A=
+## ## whereby some types get preferentially coerced into other types. Can=0A=
+## ## you draw a diagram that represents the hierarchy of how these data=0A=
+## ## types are coerced?=0A=
+heights &lt;- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, =
+NA, 72, 65, 64, 70, 63, 65)=0A=
+=0A=
+# 1.=0A=
+heights_no_na &lt;- heights[!is.na(heights)] =0A=
+# or=0A=
+heights_no_na &lt;- na.omit(heights)=0A=
+=0A=
+# 2.=0A=
+median(heights, na.rm =3D TRUE)=0A=
+=0A=
+# 3.=0A=
+heights_above_67 &lt;- heights_no_na[heights_no_na &gt; 67]=0A=
+length(heights_above_67)=0A=
+## ###Challenge=0A=
+## 1. Using this vector of heights in inches, create a new vector with =
+the NAs removed.=0A=
+##=0A=
+##    heights &lt;- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, =
+63, 63, NA, 72, 65, 64, 70, 63, 65)=0A=
+##=0A=
+## 2. Use the function `median()` to calculate the median of the =
+`heights` vector.=0A=
+##=0A=
+## 3. Use R to figure out how many people in the set are taller than 67 =
+inches.=0A=
+=0A=
+=0A=
+### Presentation of the survey data=0A=
+## download.file("https://ndownloader.figshare.com/files/2292169",=0A=
+##               "data/portal_data_joined.csv")=0A=
+=0A=
+## Challenge=0A=
+## Based on the output of `str(surveys)`, can you answer the following =
+questions?=0A=
+## * What is the class of the object `surveys`?=0A=
+## * How many rows and how many columns are in this object?=0A=
+## * How many species have been recorded during these surveys?=0A=
+=0A=
+=0A=
+## Indexing and subsetting data frames=0A=
+### Challenges:=0A=
+###=0A=
+### 1. Create a `data.frame` (`surveys_200`) containing only the=0A=
+###    data in row 200 of the `surveys` dataset.=0A=
+###=0A=
+### 2. Notice how `nrow()` gave you the number of rows in a `data.frame`?=0A=
+###=0A=
+###      * Use that number to pull out just that last row in the data =
+frame=0A=
+###      * Compare that with what you see as the last row using `tail()` =
+to make=0A=
+###        sure it's meeting expectations.=0A=
+###      * Pull out that last row using `nrow()` instead of the row =
+number=0A=
+###      * Create a new data frame object (`surveys_last`) from that =
+last row=0A=
+###=0A=
+### 3. Use `nrow()` to extract the row that is in the middle of the=0A=
+###    data frame. Store the content of this row in an object named=0A=
+###    `surveys_middle`.=0A=
+###=0A=
+### 4. Combine `nrow()` with the `-` notation above to reproduce the =
+behavior of=0A=
+###    `head(surveys)`, keeping just the first through 6th rows of the =
+surveys=0A=
+###    dataset.=0A=
+=0A=
+### Factors=0A=
+sex &lt;- factor(c("male", "female", "female", "male"))=0A=
+year_fct &lt;- factor(c(1990, 1983, 1977, 1998, 1990))=0A=
+as.numeric(year_fct)               # Wrong! And there is no warning...=0A=
+as.numeric(as.character(year_fct)) # Works...=0A=
+as.numeric(levels(year_fct))[year_fct]    # The recommended way.=0A=
+## bar plot of the number of females and males captured during the =
+experiment:=0A=
+plot(surveys$sex)=0A=
+## Challenges=0A=
+##=0A=
+## * Rename "F" and "M" to "female" and "male" respectively.=0A=
+## * Now that we have renamed the factor level to "undetermined", can =
+you recreate the=0A=
+##   barplot such that "undetermined" is last (after "male")=0A=
+## ## Compare the difference between our data read as `factor` vs =
+`character`.=0A=
+## surveys &lt;- read.csv("data/portal_data_joined.csv", =
+stringsAsFactors =3D TRUE)=0A=
+## str(surveys)=0A=
+## surveys &lt;- read.csv("data/portal_data_joined.csv", =
+stringsAsFactors =3D FALSE)=0A=
+## str(surveys)=0A=
+## ## Convert the column "plot_type" into a factor=0A=
+## surveys$plot_type &lt;- factor(surveys$plot_type)=0A=
+## ## Challenge:=0A=
+## ##  There are a few mistakes in this hand-crafted `data.frame`,=0A=
+## ##  can you spot and fix them? Don't hesitate to experiment!=0A=
+## animal_data &lt;- data.frame(=0A=
+##       animal =3D c(dog, cat, sea cucumber, sea urchin),=0A=
+##       feel =3D c("furry", "squishy", "spiny"),=0A=
+##       weight =3D c(45, 8 1.1, 0.8)=0A=
+##       )=0A=
+## ## Challenge:=0A=
+## ##   Can you predict the class for each of the columns in the =
+following=0A=
+## ##   example?=0A=
+## ##   Check your guesses using `str(country_climate)`:=0A=
+## ##   * Are they what you expected? Why? why not?=0A=
+## ##   * What would have been different if we had added =
+`stringsAsFactors =3D FALSE`=0A=
+## ##     when we created this data frame?=0A=
+## ##   * What would you need to change to ensure that each column had =
+the=0A=
+## ##     accurate data type?=0A=
+## country_climate &lt;- data.frame(country =3D c("Canada", "Panama", =
+"South Africa", "Australia"),=0A=
+##                                climate =3D c("cold", "hot", =
+"temperate", "hot/temperate"),=0A=
+##                                temperature =3D c(10, 30, 18, "15"),=0A=
+##                                northern_hemisphere =3D c(TRUE, TRUE, =
+FALSE, "FALSE"),=0A=
+##                                has_kangaroo =3D c(FALSE, FALSE, =
+FALSE, 1))=0A=
+=0A=
+=0A=
+## ## Pipes Challenge:=0A=
+## ##  Using pipes, subset the data to include animals collected=0A=
+## ##  before 1995, and retain the columns `year`, `sex`, and `weight.`=0A=
+## ## Mutate Challenge:=0A=
+## ##  Create a new data frame from the `surveys` data that meets the =
+following=0A=
+## ##  criteria: contains only the `species_id` column and a column that=0A=
+## ##  contains values that are half the `hindfoot_length` values (e.g. a=0A=
+## ##  new column `hindfoot_half`). In this `hindfoot_half` column, =
+there are=0A=
+## ##  no NA values and all values are &lt; 30.=0A=
+## =0A=
+## ##  Hint: think about how the commands should be ordered to produce =
+this data frame!=0A=
+## ## Count Challenges:=0A=
+## ##  1. How many animals were caught in each `plot_type` surveyed?=0A=
+## =0A=
+## ##  2. Use `group_by()` and `summarize()` to find the mean, min, and =
+max=0A=
+## ## hindfoot length for each species (using `species_id`). Also add =
+the number of=0A=
+## ## observations (hint: see `?n`).=0A=
+## =0A=
+## ##  3. What was the heaviest animal measured in each year? Return the=0A=
+## ##  columns `year`, `genus`, `species_id`, and `weight`.=0A=
+## ## Reshaping challenges=0A=
+## =0A=
+## ## 1. Make a wide data frame with `year` as columns, `plot_id`` as =
+rows, and where the values are the number of genera per plot. You will =
+need to summarize before reshaping, and use the function `n_distinct` to =
+get the number of unique genera within a chunk of data. It's a powerful =
+function! See `?n_distinct` for more.=0A=
+## =0A=
+## ## 2. Now take that data frame, and make it long again, so each row =
+is a unique `plot_id` `year` combination=0A=
+## =0A=
+## ## 3. The `surveys` data set is not truly wide or long because there =
+are two columns of measurement - `hindfoot_length` and `weight`.  This =
+makes it difficult to do things like look at the relationship between =
+mean values of each measurement per year in different plot types. Let's =
+walk through a common solution for this type of problem. First, use =
+`gather` to create a truly long dataset where we have a key column =
+called `measurement` and a `value` column that takes on the value of =
+either `hindfoot_length` or `weight`. Hint: You'll need to specify which =
+columns are being gathered.=0A=
+## =0A=
+## ## 4. With this new truly long data set, calculate the average of =
+each `measurement` in each `year` for each different `plot_type`. Then =
+`spread` them into a wide data set with a column for `hindfoot_length` =
+and `weight`. Hint: Remember, you only need to specify the key and value =
+columns for `spread`.=0A=
+## =0A=
+## ### Create the dataset for exporting:=0A=
+## ##  Start by removing observations for which the `species_id`, =
+`weight`,=0A=
+## ##  `hindfoot_length`, or `sex` data are missing:=0A=
+## surveys_complete &lt;- surveys %&gt;%=0A=
+##     filter(species_id !=3D "",        # remove missing species_id=0A=
+##            !is.na(weight),                 # remove missing weight=0A=
+##            !is.na(hindfoot_length),        # remove missing =
+hindfoot_length=0A=
+##            sex !=3D "")                      # remove missing sex=0A=
+## =0A=
+## ##  Now remove rare species in two steps. First, make a list of =
+species which=0A=
+## ##  appear at least 50 times in our dataset:=0A=
+## species_counts &lt;- surveys_complete %&gt;%=0A=
+##     count(species_id) %&gt;%=0A=
+##     filter(n &gt;=3D 50) %&gt;%=0A=
+##     select(species_id)=0A=
+## =0A=
+## ##  Second, keep only those species:=0A=
+## surveys_complete &lt;- surveys_complete %&gt;%=0A=
+##     filter(species_id %in% species_counts$species_id)=0A=
+=0A=
+=0A=
+### Data Visualization with ggplot2=0A=
+## install.packages("hexbin")=0A=
+## library(hexbin)=0A=
+## surveys_plot +=0A=
+##  geom_hex()=0A=
+## ### Challenge with hexbin=0A=
+## ##=0A=
+## ## To use the hexagonal binning with **`ggplot2`**, first install the =
+`hexbin`=0A=
+## ## package from CRAN:=0A=
+## =0A=
+## install.packages("hexbin")=0A=
+## library(hexbin)=0A=
+## =0A=
+## ## Then use the `geom_hex()` function:=0A=
+## =0A=
+## surveys_plot +=0A=
+##     geom_hex()=0A=
+## =0A=
+## ## What are the relative strengths and weaknesses of a hexagonal bin=0A=
+## ## plot compared to a scatter plot?=0A=
+## ## Challenge with boxplots:=0A=
+## ##  Start with the boxplot we created:=0A=
+## ggplot(data =3D surveys_complete, mapping =3D aes(x =3D species_id, y =
+=3D weight)) +=0A=
+##   geom_boxplot(alpha =3D 0) +=0A=
+##   geom_jitter(alpha =3D 0.3, color =3D "tomato")=0A=
+## =0A=
+## ##  1. Replace the box plot with a violin plot; see `geom_violin()`.=0A=
+## =0A=
+## ##  2. Represent weight on the log10 scale; see `scale_y_log10()`.=0A=
+## =0A=
+## ##  3. Create boxplot for `hindfoot_length` overlaid on a jitter =
+layer.=0A=
+## =0A=
+## ##  4. Add color to the data points on your boxplot according to the=0A=
+## ##  plot from which the sample was taken (`plot_id`).=0A=
+## ##  *Hint:* Check the class for `plot_id`. Consider changing the class=0A=
+## ##  of `plot_id` from integer to factor. Why does this change how R=0A=
+## ##  makes the graph?=0A=
+## =0A=
+## ### Plotting time series challenge:=0A=
+## ##=0A=
+## ##  Use what you just learned to create a plot that depicts how the=0A=
+## ##  average weight of each species changes through the years.=0A=
+## =0A=
+## install.packages("gridExtra")=0A=
+## ### Final plotting challenge:=0A=
+## ##  With all of this information in hand, please take another five=0A=
+## ##  minutes to either improve one of the plots generated in this=0A=
+## ##  exercise or create a beautiful graph of your own. Use the RStudio=0A=
+## ##  ggplot2 cheat sheet for inspiration:=0A=
+## ##  =
+https://www.rstudio.com/wp-content/uploads/2015/08/ggplot2-cheatsheet.pdf=0A=
+=0A=
+=0A=
+## SQL databases and R=0A=
+## install.packages(c("dbplyr", "RSQLite"))=0A=
+library(dplyr)=0A=
+library(dbplyr)=0A=
+mammals &lt;- DBI::dbConnect(RSQLite::SQLite(), =
+"data/portal_mammals.sqlite")=0A=
+src_dbi(mammals)=0A=
+tbl(mammals, sql("SELECT year, species_id, plot_id FROM surveys"))=0A=
+surveys &lt;- tbl(mammals, "surveys")=0A=
+surveys %&gt;%=0A=
+    select(year, species_id, plot_id)=0A=
+## with dplyr syntax=0A=
+species &lt;- tbl(mammals, "species")=0A=
+=0A=
+left_join(surveys, species) %&gt;%=0A=
+  filter(taxa =3D=3D "Rodent") %&gt;%=0A=
+  group_by(taxa, year) %&gt;%=0A=
+  tally %&gt;%=0A=
+  collect()=0A=
+=0A=
+## with SQL syntax=0A=
+query &lt;- paste("=0A=
+SELECT a.year, b.taxa,count(*) as count=0A=
+FROM surveys a=0A=
+JOIN species b=0A=
+ON a.species_id =3D b.species_id=0A=
+AND b.taxa =3D 'Rodent'=0A=
+GROUP BY a.year, b.taxa",=0A=
+sep =3D "" )=0A=
+=0A=
+tbl(mammals, sql(query))=0A=
+=0A=
+=0A=
+### Challenge=0A=
+## Write a query that returns the number of rodents observed in each=0A=
+## plot in each year.=0A=
+=0A=
+##  Hint: Connect to the species table and write a query that joins=0A=
+##  the species and survey tables together to exclude all=0A=
+##  non-rodents. The query should return counts of rodents by year.=0A=
+=0A=
+## Optional: Write a query in SQL that will produce the same=0A=
+## result. You can join multiple tables together using the following=0A=
+## syntax where foreign key refers to your unique id (e.g.,=0A=
+## `species_id`):=0A=
+=0A=
+## SELECT table.col, table.col=0A=
+## FROM table1 JOIN table2=0A=
+## ON table1.key =3D table2.key=0A=
+## JOIN table3 ON table2.key =3D table3.key=0A=
+=0A=
+## species &lt;- tbl("mammals", species)=0A=
+## genus_counts &lt;- left_join(surveys, plots) %&gt;%=0A=
+##   left_join(species) %&gt;%=0A=
+##   group_by(plot_type, genus) %&gt;%=0A=
+##   tally %&gt;%=0A=
+##   collect()=0A=
+### Challenge=0A=
+=0A=
+## Write a query that returns the total number of rodents in each=0A=
+## genus caught in the different plot types.=0A=
+=0A=
+##  Hint: Write a query that joins the species, plot, and survey=0A=
+##  tables together.  The query should return counts of genus by plot=0A=
+##  type.=0A=
+species &lt;- read_csv("data/species.csv")=0A=
+surveys &lt;- read_csv("data/surveys.csv")=0A=
+plots &lt;- read_csv("data/plots.csv")=0A=
+my_db_file &lt;- "portal-database.sqlite"=0A=
+my_db &lt;- src_sqlite(my_db_file, create =3D TRUE)=0A=
+my_db=0A=
+### Challenge=0A=
+=0A=
+## Add the remaining species table to the my_db database and run some=0A=
+## of your queries from earlier in the lesson to verify that you=0A=
+## have faithfully recreated the mammals database.=0A=
+=0A=
+=0A=
+</PRE></BODY></HTML>
